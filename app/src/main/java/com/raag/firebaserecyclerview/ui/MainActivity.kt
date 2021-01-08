@@ -8,29 +8,31 @@ package com.raag.firebaserecyclerview.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.raag.firebaserecyclerview.adapter.MainAdapter
+import com.raag.firebaserecyclerview.data.Names
 import com.raag.firebaserecyclerview.databinding.ActivityMainBinding
 import com.raag.firebaserecyclerview.model.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private val adapter = MainAdapter()
-    private val viewModel = MainViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityMainBinding.inflate(layoutInflater).apply {
-            setContentView(root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
             //inicia el adaptador con el recyclervieew
-            recyclerView.adapter = adapter
+            binding.recyclerView.adapter = adapter
 
             //Observa los datos y los asigna por el adapter a la lista mutable
-            viewModel.fetchData().observeForever {names ->
-                adapter.setListData(names)
+            MainViewModel().fetchData().observe(this, Observer{
+                adapter.setListData(it)
                 adapter.notifyDataSetChanged()
-            }
-        }
+            })
+
 
     }
 

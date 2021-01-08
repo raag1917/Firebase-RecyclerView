@@ -9,6 +9,7 @@ class Repo {
     //recuperación de los tados de la lista de Firebase
     fun getData(): LiveData<MutableList<Names>> {
             val mutableData = MutableLiveData<MutableList<Names>>()
+
             FirebaseFirestore.getInstance().collection("Nombres").get().addOnSuccessListener { names ->
                 val listData = mutableListOf<Names>()
                 for(document in names){
